@@ -33,11 +33,30 @@ class Lexer(private val input: String) {
             '{' -> newToken(TokenType.LBRACE, ch)
             '}' -> newToken(TokenType.RBRACE, ch)
             '\u0000' -> Token(TokenType.EOF, "")
-            else -> Token(TokenType.ILLEGAL, ch.toString())
+            else -> {
+                if (isLetter(ch)) {
+                    val literal = readIdentifier()
+                    return Token(TokenType.IDENT, literal)
+                } else {
+                    newToken(TokenType.ILLEGAL, ch)
+                }
+            }
         }
 
         readChar()
         return tok
+    }
+
+    private fun readIdentifier(): String {
+        val startPosition = position
+        while (isLetter(ch)) {
+            readChar()
+        }
+        return input.substring(startPosition, position)
+    }
+
+    private fun isLetter(ch: Char): Boolean {
+        return ch in 'a'..'z' || ch in 'A'..'Z' || ch == '_'
     }
 
     private fun newToken(tokenType: TokenType, ch: Char): Token {
