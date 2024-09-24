@@ -105,4 +105,40 @@ class LexerTest {
             )
         }
     }
+
+    @Test
+    fun testNextToken3() {
+        val input = """
+        !-/*5;
+        5 < 10 > 5;
+        """
+        val tests = listOf(
+            Token(TokenType.BANG, "!"),
+            Token(TokenType.MINUS, "-"),
+            Token(TokenType.SLASH, "/"),
+            Token(TokenType.ASTERISK, "*"),
+            Token(TokenType.INT, "5"),
+            Token(TokenType.SEMICOLON, ";"),
+            Token(TokenType.INT, "5"),
+            Token(TokenType.LT, "<"),
+            Token(TokenType.INT, "10"),
+            Token(TokenType.GT, ">"),
+            Token(TokenType.INT, "5"),
+        )
+
+        val lexer = Lexer(input)
+        tests.forEach { expectedToken ->
+            val token = lexer.nextToken()
+            assertEquals(
+                expectedToken.type,
+                token.type,
+                "期待されたTokenのTypeが異なります"
+            )
+            assertEquals(
+                expectedToken.literal,
+                token.literal,
+                "期待されたTokenのLiteralが異なります"
+            )
+        }
+    }
 }
