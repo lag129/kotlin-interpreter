@@ -37,11 +37,15 @@ class Lexer(private val input: String) {
             '\u0000' -> Token(TokenType.EOF, "")
             else -> {
                 if (isLetter(ch)) {
-                    return Token(lookupIdent(readIdentifier()), readIdentifier())
+                    val literal = readIdentifier()
+                    val type = lookupIdent(literal)
+                    return Token(type, literal)
                 } else if (isDigit(ch)) {
-                    return Token(TokenType.INT, readNumber())
+                    val type = TokenType.INT
+                    val literal = readNumber()
+                    return Token(type, literal)
                 } else {
-                    return newToken(TokenType.ILLEGAL, ch)
+                    newToken(TokenType.ILLEGAL, ch)
                 }
             }
         }
