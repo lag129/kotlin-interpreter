@@ -11,6 +11,13 @@ enum class TokenType(val literal: String) {
     // 演算子
     ASSIGN("="),
     PLUS("+"),
+    MINUS("-"),
+    BANG("!"),
+    ASTERISK("*"),
+    SLASH("/"),
+
+    LT("<"),
+    GT(">"),
 
 
     // デリミタ
