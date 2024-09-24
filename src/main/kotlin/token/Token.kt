@@ -5,7 +5,7 @@ enum class TokenType(val literal: String) {
     EOF("EOF"),
 
     // 識別子+リテラル
-    INDENT("INDENT"),
+    IDENT("IDENT"),
     INT("INT"),
 
     // 演算子
