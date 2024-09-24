@@ -2,6 +2,7 @@ package org.example.lexer
 
 import org.example.token.Token
 import org.example.token.TokenType
+import org.example.token.lookupIdent
 
 class Lexer(private val input: String) {
     private var position = 0
@@ -23,6 +24,7 @@ class Lexer(private val input: String) {
     }
 
     fun nextToken(): Token {
+        skipWhitespace()
         val tok: Token = when (ch) {
             '=' -> newToken(TokenType.ASSIGN, ch)
             ';' -> newToken(TokenType.SEMICOLON, ch)
@@ -35,16 +37,23 @@ class Lexer(private val input: String) {
             '\u0000' -> Token(TokenType.EOF, "")
             else -> {
                 if (isLetter(ch)) {
-                    val literal = readIdentifier()
-                    return Token(TokenType.IDENT, literal)
+                    return Token(lookupIdent(readIdentifier()), readIdentifier())
+                } else if (isDigit(ch)) {
+                    return Token(TokenType.INT, readNumber())
                 } else {
-                    newToken(TokenType.ILLEGAL, ch)
+                    return newToken(TokenType.ILLEGAL, ch)
                 }
             }
         }
 
         readChar()
         return tok
+    }
+
+    private fun skipWhitespace() {
+        while (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r') {
+            readChar()
+        }
     }
 
     private fun readIdentifier(): String {
@@ -57,6 +66,18 @@ class Lexer(private val input: String) {
 
     private fun isLetter(ch: Char): Boolean {
         return ch in 'a'..'z' || ch in 'A'..'Z' || ch == '_'
+    }
+
+    private fun readNumber(): String {
+        val startPosition = position
+        while (isDigit(ch)) {
+            readChar()
+        }
+        return input.substring(startPosition, position)
+    }
+
+    private fun isDigit(ch: Char): Boolean {
+        return ch in '0'..'9'
     }
 
     private fun newToken(tokenType: TokenType, ch: Char): Token {

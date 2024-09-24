@@ -31,3 +31,12 @@ data class Token(
     val type: TokenType,
     val literal: String
 )
+
+var keywords = mapOf(
+    "fn" to TokenType.FUNCTION,
+    "let" to TokenType.LET
+)
+
+fun lookupIdent(ident: String): TokenType {
+    return keywords[ident] ?: TokenType.IDENT
+}
