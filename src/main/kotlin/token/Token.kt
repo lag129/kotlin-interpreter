@@ -32,6 +32,11 @@ enum class TokenType(val literal: String) {
     // キーワード
     FUNCTION("FUNCTION"),
     LET("LET"),
+    TRUE("TRUE"),
+    FALSE("FALSE"),
+    IF("IF"),
+    ELSE("ELSE"),
+    RETURN("RETURN")
 }
 
 data class Token(
@@ -41,7 +46,12 @@ data class Token(
 
 var keywords = mapOf(
     "fn" to TokenType.FUNCTION,
-    "let" to TokenType.LET
+    "let" to TokenType.LET,
+    "true" to TokenType.TRUE,
+    "false" to TokenType.FALSE,
+    "if" to TokenType.IF,
+    "else" to TokenType.ELSE,
+    "return" to TokenType.RETURN
 )
 
 fun lookupIdent(ident: String): TokenType {

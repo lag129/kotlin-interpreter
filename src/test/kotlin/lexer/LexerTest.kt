@@ -141,4 +141,50 @@ class LexerTest {
             )
         }
     }
+
+    @Test
+    fun testNextToken4() {
+        val input = """
+        if (5 < 10) {
+            return true;
+        } else {
+            return false;
+        };
+        """
+        val tests = listOf(
+            Token(TokenType.IF, "if"),
+            Token(TokenType.LPAREN, "("),
+            Token(TokenType.INT, "5"),
+            Token(TokenType.LT, "<"),
+            Token(TokenType.INT, "10"),
+            Token(TokenType.RPAREN, ")"),
+            Token(TokenType.LBRACE, "{"),
+            Token(TokenType.RETURN, "return"),
+            Token(TokenType.TRUE, "true"),
+            Token(TokenType.SEMICOLON, ";"),
+            Token(TokenType.RBRACE, "}"),
+            Token(TokenType.ELSE, "else"),
+            Token(TokenType.LBRACE, "{"),
+            Token(TokenType.RETURN, "return"),
+            Token(TokenType.FALSE, "false"),
+            Token(TokenType.SEMICOLON, ";"),
+            Token(TokenType.RBRACE, "}"),
+            Token(TokenType.SEMICOLON, ";"),
+        )
+
+        val lexer = Lexer(input)
+        tests.forEach { expectedToken ->
+            val token = lexer.nextToken()
+            assertEquals(
+                expectedToken.type,
+                token.type,
+                "期待されたTokenのTypeが異なります"
+            )
+            assertEquals(
+                expectedToken.literal,
+                token.literal,
+                "期待されたTokenのLiteralが異なります"
+            )
+        }
+    }
 }
