@@ -36,7 +36,10 @@ enum class TokenType(val literal: String) {
     FALSE("FALSE"),
     IF("IF"),
     ELSE("ELSE"),
-    RETURN("RETURN")
+    RETURN("RETURN"),
+
+    EQ("=="),
+    NOT_EQ("!=")
 }
 
 data class Token(
