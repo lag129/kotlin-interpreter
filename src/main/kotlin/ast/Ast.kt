@@ -4,7 +4,6 @@ import org.example.token.Token
 
 interface Node {
     fun tokenLiteral(): String
-    fun string(): String
 }
 
 interface Statement : Node {
@@ -28,29 +27,25 @@ data class Program(
 }
 
 data class LetStatement(
-    val token: Token,
-    val name: Identifier,
-    val value: Expression,
-)
+    var token: Token,
+    var name: Identifier? = null,
+    var value: Expression? = null,
+) : Statement {
+    override fun statementNode() {}
 
-fun LetStatement.statementNode() {
-
-}
-
-fun LetStatement.tokenLiteral(): String {
-    return token.literal
+    override fun tokenLiteral(): String {
+        return token.literal
+    }
 }
 
 data class Identifier(
     val token: Token,
     val value: String,
-)
+) : Expression {
+    override fun expressionNode() {}
 
-fun Identifier.expressionNode() {
-
-}
-
-fun Identifier.tokenLiteral(): String {
-    return token.literal
+    override fun tokenLiteral(): String {
+        return token.literal
+    }
 }
 
