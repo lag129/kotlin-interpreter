@@ -2,12 +2,12 @@ package org.example.parser
 
 import org.example.ast.*
 import org.example.lexer.Lexer
-import org.example.token.Token
 import org.example.token.TokenType
 
 class Parser(private val lexer: Lexer) {
-    private var curToken: Token = lexer.nextToken()
-    private var peekToken: Token = lexer.nextToken()
+    private var curToken = lexer.nextToken()
+    private var peekToken = lexer.nextToken()
+    private var errors = mutableListOf<String>()
 
     private fun nextToken() {
         curToken = peekToken
@@ -55,12 +55,20 @@ class Parser(private val lexer: Lexer) {
         return stmt
     }
 
-    private fun curTokenIs(@Suppress("SameParameterValue") t: TokenType): Boolean {
-        return curToken.type == t
+    private fun curTokenIs(@Suppress("SameParameterValue") tokenType: TokenType): Boolean {
+        return curToken.type == tokenType
     }
 
-    private fun peekTokenIs(t: TokenType): Boolean {
-        return peekToken.type == t
+    private fun peekTokenIs(tokenType: TokenType): Boolean {
+        return peekToken.type == tokenType
+    }
+
+    private fun peekError(tokenType: TokenType) {
+        errors.add("expected next token to be $tokenType, got ${peekToken.type} instead")
+    }
+
+    fun errors(): List<String> {
+        return errors
     }
 
     private fun expectPeek(t: TokenType): Boolean {
@@ -68,6 +76,7 @@ class Parser(private val lexer: Lexer) {
             nextToken()
             return true
         } else {
+            peekError(t)
             return false
         }
     }
