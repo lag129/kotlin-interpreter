@@ -1,6 +1,7 @@
 package parser
 
 import org.example.ast.LetStatement
+import org.example.ast.ReturnStatement
 import org.example.lexer.Lexer
 import org.example.parser.Parser
 import org.junit.jupiter.api.Test
@@ -46,6 +47,24 @@ class ParserTest {
         )
         errors.forEachIndexed { i, error ->
             assertEquals(expectedErrors[i], error)
+        }
+    }
+
+    @Test
+    fun testLetStatements3() {
+        val input = """
+        return 5;
+        return 10;
+        return 993322;
+        """
+        val lexer = Lexer(input)
+        val parser = Parser(lexer)
+        val program = parser.parseProgram()
+        assertEquals(3, program.statements.size)
+        val tests = listOf("5", "10", "993322")
+        program.statements.forEachIndexed { i, stmt ->
+            val returnStmt = stmt as ReturnStatement
+            assertEquals("return", returnStmt.tokenLiteral())
         }
     }
 

@@ -38,6 +38,17 @@ data class LetStatement(
     }
 }
 
+data class ReturnStatement(
+    var token: Token,
+    var returnValue: Expression? = null,
+) : Statement {
+    override fun statementNode() {}
+
+    override fun tokenLiteral(): String {
+        return token.literal
+    }
+}
+
 data class Identifier(
     val token: Token,
     val value: String,
